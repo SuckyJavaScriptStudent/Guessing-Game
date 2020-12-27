@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<!--
+Author: Asael Acosta
+Teacher: Mr. Carr
+Class: Computer Programming
+Written: 9/7/20
+-->
+<html>
+	<head>
+		<meta charset="UFT-8">
+		<Title>Guessing Games</Title>
+		<style>
+		html{height:100%;}
+		
+		body{background-image:linear-gradient(#ff0000,#0000ff);}
+		
+		#ScoreBoard{
+			position:fixed;
+			top:20%;
+			left:50%;
+			width:35%;
+			transform:translate(-50%,-50%);
+			background-color:#5a5a5a;
+			color:white;
+			font-family:Comic Sans MS;
+			text-align:center;
+		}
+		
+		h2{font-size:20px;}
+		</style>
+		<script language="javascript">
+		//Global Variables
+			var rangeValue1
+			var rangeValue2
+			var attemptCount = 0;
+			var userDonePlaying=false;
+			var donePlaying = false;
+			var userGuessedWrong = true;
+			var scoreBoard = ["fillerValue"];
+			
+		//Loop acting as main program so that user can play game repeatedly
+			while(!userDonePlaying){
+		//range values 1 and 2 are both asked of by the user and verify each to ensure that they are integers
+				rangeValue1 = parseFloat(prompt("Please enter the first numerical value of your guessing range.",""));
+					while(isNaN(rangeValue1)){
+						rangeValue1 = parseFloat(prompt("The value you input wasn't an integer, please try again with an integer input."));
+						continue;
+					}
+					
+				rangeValue2 = parseFloat(prompt("Please enter the second value of your guessing range.",""));
+					while(isNaN(rangeValue2)||rangeValue2<=rangeValue1){
+						rangeValue2 = parseFloat(prompt("The value you input was either not an integer, or it was less than your first input value of "+rangeValue1+".",""));
+						continue;
+					}
+
+		//defines correct answer from last 2 user inputs and asks user to enter first try at guessing the right number
+				var correctAns = Math.floor(Math.random()*((rangeValue2-rangeValue1)+1))+rangeValue1;
+				console.log(correctAns);
+				
+				var userAttempt = parseFloat(prompt("Please enter a guess of a number in your selected range: "+rangeValue1+" - "+rangeValue2+"",""));
+				
+		//nested while loop here to check as many times per game as necessary what kind of mistake the user made and telling the user what mistake they made
+				while(userGuessedWrong){
+		//first 4 conditions check for various mistakes user might've made
+						if( isNaN(userAttempt) ){
+							userAttempt=prompt("The value you entered was not an integer. Please try again with a valid input", "");
+							continue;
+						}
+						else if(userAttempt<rangeValue1){
+							userAttempt=parseFloat( prompt("The value you input was outside the selected range. Please try again.", ""));
+							attemptCount = attemptCount + 1;
+							continue;
+						}
+						else if(userAttempt>rangeValue2){
+							userAttempt=parseFloat( prompt("The value you input was outside the selected range. Please try again.", ""));
+							attemptCount = attemptCount + 1;
+							continue;
+						}
+						else if(userAttempt > correctAns){
+							userAttempt=parseFloat(prompt("The value you input was larger than the correct answer. Please try again.",""));
+							attemptCount = attemptCount + 1;
+							continue;
+						}
+						else if(userAttempt < correctAns){
+							userAttempt=parseFloat(prompt("The value you input was smaller than the correct answer. Please Try again.", ""));
+							attemptCount = attemptCount + 1;
+							continue;
+						}
+				//this condition is for when the user guesses the right answer and asks the user if they want to play again
+						else if (userAttempt == correctAns){
+							attemptCount = attemptCount + 1;
+							var userDonePlaying = confirm("Congratulations! You have guessed the correct answer! Do you wish to play again?");
+				//assuming user chose to play again, this part redefines the first and second range values, makes a new correct answer to guess for, and initiates the loop to continue
+								if (userDonePlaying == true){
+				//the two lines below are to add the number of times the user guessed into the scoreboard for when the user wants to stop playing
+									scoreBoard.push(attemptCount);
+									attemptCount = 0;
+									userGuessedWrong=true;
+									console.log(scoreBoard);
+										rangeValue1 = parseFloat(prompt("Please enter the first numerical value of your guessing range.",""));
+											while(isNaN(rangeValue1)){
+												rangeValue1 = parseFloat(prompt("The value you input wasn't an integer, please try again with an integer input."));
+												continue;
+											}
+											
+										rangeValue2 = parseFloat(prompt("Please enter the second value of your guessing range.",""));
+											while(isNaN(rangeValue2)||rangeValue2<=rangeValue1){
+												rangeValue2 = parseFloat(prompt("The value you input was either not an integer, or it was less than your first input value of "+rangeValue1+".",""));
+												continue;
+											}
+
+										correctAns = Math.floor(Math.random()*((rangeValue2-rangeValue1)+1))+rangeValue1;
+										console.log(correctAns);
+										
+										userAttempt = parseFloat(prompt("Please enter a guess of a number in your selected range: "+rangeValue1+" - "+rangeValue2+"",""));
+									continue;
+								}
+				//if the user chose to NOT play again, the loops for playing the entire game and checking for the right answer are told to stop and the final score is added to the scoreboard.
+				//the <head> part of the js is done and now the scoreboard will appear to the user along with a thank you message
+								else if (userDonePlaying == false){
+									scoreBoard.push(attemptCount);
+									attemptCount = 0;
+									userGuessedWrong=false;
+									userDonePlaying = true;
+									continue;
+								}  
+						}
+					}
+					continue;
+				}
+		</script>
+	</head>
+	<body>
+		<div id="ScoreBoard">
+		<h1>Thank You For Playing My Game!!!!</h1>
+		<h2>Below are the number of attempts you took to guess the right answer in each game:
+		</br>
+		</br>
+		<script>
+		//this script is to display the scores to the user accruately and without excess regardless of how many times the user played the game
+			for(var i=1;i<scoreBoard.length;i++){
+				document.write("Game "+i+": "+scoreBoard[i]+" </br>");
+			}
+		</script>
+		</h2>
+		</div>
+	</body>
+</html>
